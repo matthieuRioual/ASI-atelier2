@@ -37,8 +37,8 @@ public class Card {
 	private int defence;
 	@Column(name="price")
 	private int price;
-	@Column(name="isold")
-	private boolean isold;
+	@Column(name="flagmarket")
+	private int flagmarket;
 	@ManyToOne()
 	@JsonBackReference
 	private User owner;
@@ -60,7 +60,7 @@ public class Card {
 		this.defence = defence;
 		this.price = price;
 		this.owner = owner;
-		this.isold=false;
+		this.flagmarket=0;
 	}
 	
 
@@ -133,6 +133,7 @@ public class Card {
 		this.defence = defence;
 		this.price = price;
 		this.owner = u;
+		this.flagmarket=0;
 		}
 
 
@@ -146,10 +147,6 @@ public class Card {
 
 	public void setOwner(User owner) {
 		this.owner = owner;
-	}
-
-	public void setId(Integer id) {
-		this.id_card = id;
 	}
 
 	public void setId(int id) {
@@ -185,8 +182,14 @@ public class Card {
 		this.hp = hp;
 	}
 	
-	public boolean is_sold() {
-		return isold;
+	public int getFlagmarket() {
+		return flagmarket;
 	}
+
+
+	public void setFlagmarket(int flagmarket) {
+		this.flagmarket = flagmarket;
+	}
+
 
 }

@@ -16,7 +16,7 @@ function Requete(data, URL, method) {
 $("#submit_connexion").click(function(e){
 
     $data1 = {
-        identifiant : $("#pseudo_connexion").val(),
+        pseudo : $("#pseudo_connexion").val(),
         psw : $("#mot_de_passe_connexion").val()
       };    
 
@@ -43,19 +43,19 @@ $("#submit_inscription").click(function(e){
 $data2 = {
     name : $("#nom").val(),  
     psw : $("#mot_de_passe_inscription").val(),
-    identifiant : $("#pseudo_inscription").val()
+    pseudo : $("#pseudo_inscription").val()
 };
     
 $data3 = { 
-    identifiant : $("#pseudo_inscription").val(),
+    pseudo : $("#pseudo_inscription").val(),
     psw : $("#mot_de_passe_inscription").val()    
 };
 
     e.preventDefault();
             var retour_requete = Requete($data2, "http://localhost:8081/register", "POST");
             console.log(retour_requete);
-            if(retour_requete == 'false'){
-                $("#affichage").html("<p> Ce compte existe deja</p>");   
+            if(retour_requete == false){
+                $("#resultat").html("<p> Ce pseudo est deja utilisé</p>");   
             }
             else{
                 var retour_requete2 = Requete($data3, "http://localhost:8081/connexion", "POST");
@@ -70,45 +70,49 @@ $data3 = {
                     energy : 100,
                     family_name : "Feu",
                     hp : 8,
-                    imgurl : "URL1",
+                    imgurl : "https://www.pokepedia.fr/images/8/89/Salam%C3%A8che-RFVF.png",
                     name : "Salamèche",
-                    urlfamily : "URL2",
-                    owner_id_user : sessionStorage.getItem('id')  ,
+                    urlfamily : "https://margxt.fr/wp-content/uploads/2018/12/Pokemon-Go-Fire-80x80.png",
+                    id_user : sessionStorage.getItem('id')  ,
                     price : 50 
                 };
 
                 $data6 = { 
                     attack : 20,
                     defence : 120,
-                    description : "Aime la laitue et le fouet",
+                    description : "Aime la laitue et les épinards mais faites attention, il peut se montrer très puissant",
                     energy : 70,
                     family_name : "Végétal",
                     hp : 10,
-                    imgurl : "URL1",
+                    imgurl : "https://cdn.pixabay.com/photo/2018/04/13/16/13/pixel-3316924_1280.png",
                     name : "bulbizard",
-                    urlfamily : "URL2",
-                    owner_id_user : sessionStorage.getItem('id') ,
+                    urlfamily : "https://margxt.fr/wp-content/uploads/2018/12/Pokemon-Go-Insecte-80x80.png",
+                    id_user : sessionStorage.getItem('id') ,
                     price :50  
                 };
 
                 $data7 = { 
                     attack : 10,
                     defence : 5,
-                    description : "Tu es si faible carapuce :'(",
+                    description : "Il se réfugie dans sa carapace et réplique en éclaboussant ses adversaires",
                     energy : 15,
                     family_name : "Eau",
                     hp : 2,
-                    imgurl : "URL1",
+                    imgurl : "https://www.pokepedia.fr/images/3/39/Carapuce_de_Sacha.png",
                     name : "Carapuce",
-                    urlfamily : "URL2",
-                    owner_id_user : sessionStorage.getItem('id'),
+                    urlfamily : "https://margxt.fr/wp-content/uploads/2018/12/Pokemon-Go-Eau-80x80.png",
+                    id_user : sessionStorage.getItem('id'),
                     price : 20  
                 };
-                Requete($data5, "http://localhost:8081/addcart" , "POST");
-                Requete($data6, "http://localhost:8081/addcart" , "POST");
-                Requete($data7, "http://localhost:8081/addcart" , "POST");
+
+                Requete($data5, "http://localhost:8081/addcard" , "POST");
+                Requete($data6, "http://localhost:8081/addcard" , "POST");
+                Requete($data7, "http://localhost:8081/addcard" , "POST");
                 
                 window.location.href = "./cardHome.html";
+                console.log(sessionStorage);
+
             }
+
 });
 

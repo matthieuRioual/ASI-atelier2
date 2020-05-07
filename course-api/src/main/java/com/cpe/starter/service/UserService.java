@@ -13,42 +13,55 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public void addCardtoCollection(User user,Card C){
-		user.addCardcollection(C);
-
+	//Getters of User entity
+	public User GetUserByPseudo(String pseudo) {
+		User u=userRepository.findUserByPseudo(pseudo);
+		return u;
 	}
 	
-	public User findUserbyID(int id) {
-		return userRepository.findUserbyID(id);
+	public User GetUserByID(int id) {
+		return userRepository.findUserByID(id);
 	}
 
-	public boolean register(String name, String identifiant, String psw) {
-		if(exists(identifiant)==null) {
-			User u=new User(name,identifiant,psw);
+	//Main functions register and login
+	public User Register(String name, String pseudo, String psw) {
+		if(GetUserByPseudo(pseudo)==null) {
+			User u=new User(name,pseudo,psw);
 			userRepository.save(u);	
-			return true;
+			return u;
 		}
-		return false;
+		return null;
 	}
 	
-	public User connection(String identifiant,String psw) {
-		User A=exists(identifiant);
-		if(A!=null) {
-			return A;
+	public User Login(String pseudo,String psw) {
+		if(UserExists(pseudo,psw)) {
+			return GetUserByPseudo(pseudo);
 		}
 		else return null;
 	}
 	
-	public User exists(String identifiant) {
-		User U=userRepository.findUserbypseudo(identifiant);
-		
-		if(U !=null) {
-			return U;}
-		else return null;
+	//Verification of an existing user
+	public boolean UserExists(String pseudo,String psw) {
+		User u=GetUserByPseudo(pseudo);
+		if (u!=null){
+			if(u.getPsw().equals(psw)) {
+				return true;}
+			return false;
+		}
+		else return false;
 	}
 
-	public void takemoney(int id_user, int price) {
-		
+	//Action of money of user (used in market)
+	public void GetCredited(int id_user, int price) {
+		User u =GetUserByID(id_user);
+		int amount=u.getMoney()+price;
+		userRepository.UpdateMoney(id_user,amount);
 	}
 	
+	public void GetDebited(int id_user,int price){
+		User u =GetUserByID(id_user);
+		int amount=u.getMoney()-price;
+		userRepository.UpdateMoney(id_user,amount);
+		}
 }
+

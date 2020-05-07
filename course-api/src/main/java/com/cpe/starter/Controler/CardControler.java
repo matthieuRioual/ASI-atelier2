@@ -21,22 +21,27 @@ public class CardControler {
 	@Autowired
 	private CardService cardservice;
 	
-	@CrossOrigin
-	@RequestMapping(method=RequestMethod.POST,value="/addcart")
-	public void addfreecartes(@RequestBody Map<String, String> entry){
-		cardservice.addcard(entry);
-	}
-	
 	@CrossOrigin 
 	@RequestMapping(method=RequestMethod.GET,value="/getcard")
-	public List<Card> getallcards(@RequestParam("id") int id) {
-		return cardservice.getCardByOwner(id);
+	public List<Card> GetCardByUser(@RequestParam("id") int id_user) {
+		return cardservice.GetCardByUser(id_user);
 	}
 
 	@CrossOrigin 
 	@RequestMapping(method=RequestMethod.GET,value="/getcardbyid")
-	public Card getcardbyID(@RequestParam("id") int id) {
-		return cardservice.getCardByID(id);
+	public Card GetCardByID(@RequestParam("id") int id_card) {
+		return cardservice.GetCardByID(id_card);
 	}
 	
+	@CrossOrigin 
+	@RequestMapping(method=RequestMethod.POST,value="/addcard")
+	public void AddCard(@RequestBody Map<String, String> entry){
+		cardservice.AddCard(entry);
+	}
+	
+	@CrossOrigin 
+	@RequestMapping(method=RequestMethod.GET,value="/market")
+	public List<Card> GetCardInMarket(){
+		return cardservice.GetCardMarket();
+	}
 }

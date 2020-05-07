@@ -28,9 +28,9 @@
 
     recuperer_cartes_user();
 
-    function mise_en_vente(id_carte){
+    function mise_en_vente(id){
         
-        url = "http://localhost:8081/misenvente?id="+id_carte;
+        url = "http://localhost:8081/sellcard?id="+id;
         var retour_requete = Requete("", url, "GET");
         alert("Cette carte a été mise en vente");
         
@@ -61,7 +61,6 @@ function fillCurrentCard(imgUrlFamily,familyName,imgUrl,name,description,hp,ener
 
 
 function addCardToList(imgUrlFamily,familyName,imgUrl,name,description,hp,energy,attack,defence,price,id){
-    console.log(typeof id);
     content="\
     <td > \
     <img  class='ui avatar image clickable' src='"+imgUrl+"'> <span>"+name+" </span> \

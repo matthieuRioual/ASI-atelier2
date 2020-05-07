@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.cpe.starter.modele.Card;
 import com.cpe.starter.modele.User;
 import com.cpe.starter.repository.CardRepository;
-import com.cpe.starter.repository.UserRepository;
 
 @Service
 public class CardService {
@@ -18,44 +17,44 @@ public class CardService {
 	CardRepository cardRepository;
 	
 	@Autowired
-	UserService userService;
+	UserService userservice;
 	
-		
-	public List<Card> getCardByOwner(int id) {
-		return cardRepository.findByOwner(id);
+	//Get the cards you want by critters
+	public List<Card> GetCardByUser(int id_user) {
+		return cardRepository.GetCardByUser(id_user);
 	}
 
-	public void addcard(Map<String,String> entry) {
-		
-		User u=userService.findUserbyID(Integer.parseInt(entry.get("owner_id_user")));
+	public Card GetCardByID(int id_card) {
+		return cardRepository.GetCardByID(id_card);
+	}
+
+	public List<Card> GetCardMarket() {
+		return cardRepository.findAllmarket();
+	}
+	
+	//
+	public void AddCard(Map<String,String> entry) {
+		User u=userservice.GetUserByID(Integer.parseInt(entry.get("id_user")));
+		System.out.println(u.getid_user());
 		Card c=new Card(0, entry.get("name"), entry.get("description"), entry.get("family_name"),entry.get("urlfamily")
 				, entry.get("imgurl"),Integer.parseInt(entry.get("hp")), Integer.parseInt(entry.get("energy")),Integer.parseInt(entry.get("attack"))
 				, Integer.parseInt(entry.get("defence")), Integer.parseInt(entry.get("price")), u);
+		System.out.println(c.getOwner());
 		cardRepository.save(c);
 	}
 
-	public Card getCardByID(int id) {
-		return cardRepository.findById(id);
-	}
-
-	public List<Card> findAllmarket() {
-		return cardRepository.findAllmarket();
-	}
-
-	public boolean isalreadysold(int id) {
-		Card c=cardRepository.findById(id);
-		if(c.is_sold())
-			return true;
-		return false;
-	}
-
-	public void turntosold(int id) {
-		cardRepository.turntosold(id);
+	//Change an attribute after a transaction
+	public void ChangeMarketSituation(int id_card) {
+		Card C=cardRepository.GetCardByID(id_card);
+		if(C.getFlagmarket()==1) {
+			cardRepository.ChangeMarketSituation(0,id_card);}
+		else 
+			cardRepository.ChangeMarketSituation(1,id_card);
 		
 	}
 
 	public void changeowner(User u, int id_card) {
-		cardRepository.changeowner(u,id_card);
+		cardRepository.Changeowner(id_card,u);
 	}
 
 

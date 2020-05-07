@@ -14,10 +14,10 @@ function Requete(data, URL, method) {
 };
 
 function recuperer_cartes_vente(){
-    url = "http://localhost:8081/getcard"; //URL à changer
-    var retour_requete = Requete({}, url, "GET");
-    for(i=0;i<length(retour_requete);i++){
-        addCardToList(retour_requete[i].urlfamily,retour_requete[i].familyName,retour_requete[i].imgurl,retour_requete[i].name,retour_requete[i].description,retour_requete[i].hp,retour_requete[i].energy,retour_requete[i].attack,retour_requete[i].defence,retour_requete[i].price,retour_requete[i].id_card)
+    url = "http://localhost:8081/market";
+    var retour_requete = Requete("", url, "GET");
+    for(i=0;i<retour_requete.length;i++){
+        addCardToList(retour_requete[i].urlfamily,retour_requete[i].familyName,retour_requete[i].imgurl,retour_requete[i].name,retour_requete[i].description,retour_requete[i].hp,retour_requete[i].energy,retour_requete[i].attack,retour_requete[i].defence,retour_requete[i].price,retour_requete[i].id)
     }
 
 
@@ -29,19 +29,24 @@ $(document ).ready(function(){
 
 });
 
-function achat(id){
-    url = "http://localhost:8081/misenvente?id=" + id; //// URL pas bonne
-    var retour_requete = Requete({}, url, "GET");
+function achat(id,price){
+    url = "http://localhost:8081/buycard";
+    $data = { 
+        id_card : id,
+        id_buyer : sessionStorage.getItem('id')    
+    };
+    var retour_requete = Requete($data, url, "POST");
     if (retour_requete == false) {
-        alert("Cet achat n'a pas été réalisé")
+        alert("Vous n'avez pas assez de sous")
     }
+    else sessionStorage.setItem('money',sessionStorage.getItem('money')-price);
     window.location.reload();
 }
 
-function remplir_la_carte_courante(id){
-    url = "http://localhost:8081/misenvente?id=" + id; //// URL pas bonne
-    var retour_requete = Requete({}, url, "GET");
-    fillCurrentCard(retour_requete.urlfamily,retour_requete.familyName,retour_requete.imgurl,retour_requete.name,retour_requete.description,retour_requete.hp,retour_requete.energy,retour_requete.attack,retour_requete.defence,retour_requete.price)
+function affichage_carte(id){
+    url = "http://localhost:8081/getcardbyid?id="+id;
+    var retour_requete = Requete("", url, "GET");
+    fillCurrentCard(retour_requete.urlfamily,retour_requete.familyName,retour_requete.imgurl,retour_requete.name,retour_requete.description,retour_requete.hp,retour_requete.energy,retour_requete.attack,retour_requete.defence,retour_requete.price,retour_requete.id_card)
 }
 
 
@@ -67,27 +72,27 @@ function fillCurrentCard(imgUrlFamily,familyName,imgUrl,name,description,hp,ener
 function addCardToList(imgUrlFamily,familyName,imgUrl,name,description,hp,energy,attack,defence,price,id){
     
     content="\
-    <td onclick = remplir_la_carte_courante(id)> \
-    <img  class='ui avatar image' src='"+imgUrl+"'> <span>"+name+" </span> \
+    <td > \
+    <img  class='ui avatar image clickable' src='"+imgUrl+"'> <span>"+name+" </span> \
    </td> \
-   <td class = 'hidden content'>"+id+"</td> \
-    <td onclick = remplir_la_carte_courante(id)>"+description+"</td> \
-    <td onclick = remplir_la_carte_courante(id)>"+familyName+"</td> \
-    <td onclick = remplir_la_carte_courante(id)>"+hp+"</td> \
-    <td onclick = remplir_la_carte_courante(id)>"+energy+"</td> \
-    <td onclick = remplir_la_carte_courante(id)>"+attack+"</td> \
-    <td onclick = remplir_la_carte_courante(id)>"+defence+"</td> \
-    <td onclick = remplir_la_carte_courante(id)>"+price+"$</td>\
+    <td >"+description+"</td> \
+    <td >"+familyName+"</td> \
+    <td >"+hp+"</td> \
+    <td >"+energy+"</td> \
+    <td >"+attack+"</td> \
+    <td >"+defence+"</td> \
+    <td>"+price+"$</td>\
     <td>\
-        <div class='ui vertical animated button' tabindex='0' onclick = achat(id)>\
-            <div class='hidden content'>Buy</div>\
+        <div class='ui vertical animated button' tabindex='0'>\
+            <div class='hidden content' onclick='achat("+id.toString()+","+price+")'>Achat</div>\
     <div class='visible content'>\
         <i class='shop icon'></i>\
     </div>\
     </div>\
-    </td>";
+    </td>\
+    ";
     
-    $('#cardListId tr:last').after('<tr>'+content+'</tr>');
+    $('#cardListId tr:last').after('<tr onclick = \"affichage_carte('+id.toString()+')\">'+content+'</tr>');
     
     
 };

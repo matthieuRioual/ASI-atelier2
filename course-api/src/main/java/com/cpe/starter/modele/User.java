@@ -25,8 +25,8 @@ public class User {
 	
 	static int id_userstatic=0;
 	
-	@Column(name="identifiant")
-	private String identifiant;
+	@Column(name="pseudo")
+	private String pseudo;
 	
 	@Column(name="name")
 	private String name;
@@ -46,12 +46,12 @@ public class User {
     	
     }
     
-	public User(String name, String identifiant, String psw) {
+	public User(String name, String pseudo, String psw) {
 		super();
 		this.id_user = id_userstatic;
 		id_userstatic++;
 		this.name=name;
-		this.identifiant = identifiant;
+		this.pseudo = pseudo;
 		this.psw = psw;
 		this.money = 5000;
 		this.collection = null;
@@ -65,12 +65,12 @@ public class User {
 		this.id_user = id_user;
 	}
 
-	public String getIdentifiant() {
-		return identifiant;
+	public String getPseudo() {
+		return pseudo;
 	}
 
-	public void setIdentifiant(String identifiant) {
-		this.identifiant = identifiant;
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
 	}
 
 	public String getPsw() {

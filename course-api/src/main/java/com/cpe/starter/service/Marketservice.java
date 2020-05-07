@@ -1,7 +1,6 @@
 package com.cpe.starter.service;
 
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,27 +16,28 @@ public class Marketservice {
 	@Autowired
 	UserService userservice;
 	
-	public List<Card> getallcardmarket(){
-		return (List<Card>) cardservice.findAllmarket();
-	}
-	
-	public boolean soldcard(int id) {
-		if(cardservice.getCardByID(id).is_sold()) {
+	public boolean SellCard(int id_card) {
+		Card c=cardservice.GetCardByID(id_card);
+		if(c.getFlagmarket()==1) {
 			return false;
 		}
-		else cardservice.turntosold(id);
-		return true;
-	}
-
-	public boolean buycard(int id_card, int id_user) {
-		User u=userservice.findUserbyID(id_user);
-		Card c=cardservice.getCardByID(id_card);
-		if(u.getMoney()>c.getPrice()) {
-			userservice.takemoney(id_user,c.getPrice());
-			cardservice.changeowner(u,id_card);
+		else {
+			cardservice.ChangeMarketSituation(id_card);
 			return true;
 		}
-		return false;
+	}
+	
+	public boolean BuyCard(int id_card,int id_buyer) {
+		User buyer=userservice.GetUserByID(id_buyer);
+		int id_seller=cardservice.GetCardByID(id_card).getOwner().getid_user();
+		int price=cardservice.GetCardByID(id_card).getPrice();
+		if(buyer.getMoney()>price) {
+			userservice.GetDebited(id_buyer,price);
+			userservice.GetCredited(id_seller, price);
+			cardservice.changeowner(buyer, id_card);
+			cardservice.ChangeMarketSituation(id_card);
+			return true;}
+		else return false;
 	}
 	
 }

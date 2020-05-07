@@ -1,17 +1,15 @@
 package com.cpe.starter.Controler;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cpe.starter.modele.Card;
 import com.cpe.starter.service.Marketservice;
 
 @RestController
@@ -20,17 +18,18 @@ public class MarketController {
 	@Autowired
 	private Marketservice marketservice;
 	
+
 	@CrossOrigin
-	@RequestMapping("/market")
-	public List<Card> getallcardofmarket() {
-		return (List<Card>) marketservice.getallcardmarket();
+	@RequestMapping(method=RequestMethod.GET,value="/sellcard")
+	public boolean SellCard(@RequestParam("id") int id_card) {
+		return marketservice.SellCard(id_card);
 	}
 	
 	@CrossOrigin
-	@RequestMapping(method=RequestMethod.GET,value="/misenvente")
-	public boolean soldcard(@RequestParam("id") int id) {
-
-		return marketservice.soldcard(id);
+	@RequestMapping(method=RequestMethod.POST,value="/buycard")
+	public boolean AchatCard(@RequestBody Map<String,String> input) {
+		return marketservice.BuyCard(Integer.parseInt(input.get("id_card")),Integer.parseInt(input.get("id_buyer")));
 	}
+	
 	
 }
