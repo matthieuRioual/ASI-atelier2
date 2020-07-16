@@ -2,6 +2,7 @@ package com.cpe.starter.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,11 +46,13 @@ public class CardService {
 
 	//Change an attribute after a transaction
 	public void ChangeMarketSituation(int id_card) {
-		Card C=cardRepository.GetCardByID(id_card);
-		if(C.getFlagmarket()==1) {
-			cardRepository.ChangeMarketSituation(0,id_card);}
-		else 
-			cardRepository.ChangeMarketSituation(1,id_card);
+		Optional<Card> oC=cardRepository.findById(id_card);
+		if(oC.isPresent()) {
+			Card C=oC.get();
+			if(C.getFlagmarket()==1) {
+				cardRepository.ChangeMarketSituation(0,id_card);}
+			else 
+				cardRepository.ChangeMarketSituation(1,id_card);}
 		
 	}
 
